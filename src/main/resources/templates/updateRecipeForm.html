@@ -13,9 +13,9 @@
         <div class="col-7">
 
             <div class="recipeImage">
-                <img th:if="${recipeImage == null}" class="defaultImage" src="/images/favicon.png">
+                <img th:if="${recipeImage == null}" class="defaultImage" src="/images/favicon.png" alt="Default recipe image">
                 <img th:unless="${recipeImage == null}" class="recipeImage"
-                     th:src="*{'data:image/png;base64,' + recipeImage}">
+                     th:src="*{'data:image/png;base64,' + recipeImage}" alt="Recipe image">
             </div>
 
 

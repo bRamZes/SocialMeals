@@ -12,8 +12,9 @@ import java.util.Comparator;
 public class RecipeDTOAscComparator implements Comparator<RecipeDTO> {
 
     @Override
-    public int compare(RecipeDTO recipeDTO, RecipeDTO otherRecipeDTO) {
-        return recipeDTO.getRecipeName().compareTo(otherRecipeDTO.getRecipeName());
+    public int compare(RecipeDTO first, RecipeDTO second) {
+        return Comparator.comparing(RecipeDTO::getRecipeName)
+                .compare(first, second);
     }
 
 }
