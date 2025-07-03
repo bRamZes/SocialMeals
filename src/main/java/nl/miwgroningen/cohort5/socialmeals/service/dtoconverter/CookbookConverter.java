@@ -6,9 +6,9 @@ import nl.miwgroningen.cohort5.socialmeals.dto.SocialMealsUserDTO;
 import nl.miwgroningen.cohort5.socialmeals.model.Cookbook;
 import nl.miwgroningen.cohort5.socialmeals.model.SocialMealsUser;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Britt van Mourik
@@ -34,14 +34,9 @@ public class CookbookConverter {
     }
 
     public List<CookbookDTO> toListDTO(List<Cookbook> cookbookList) {
-
-        List<CookbookDTO> cookbookDTOs = new ArrayList<>();
-
-        for (Cookbook cookbook : cookbookList) {
-            cookbookDTOs.add(toDTO(cookbook));
-        }
-
-        return cookbookDTOs;
+        return cookbookList.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
     }
 
     public Cookbook fromNewCookbookDTO(CookbookDTO cookbookDTO, SocialMealsUser socialMealsUser) {

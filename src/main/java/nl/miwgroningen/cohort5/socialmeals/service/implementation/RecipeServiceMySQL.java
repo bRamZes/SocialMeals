@@ -15,9 +15,9 @@ import nl.miwgroningen.cohort5.socialmeals.service.dtoconverter.RecipeConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author A.H. van Zessen
@@ -177,25 +177,19 @@ public class RecipeServiceMySQL implements RecipeService {
         List<IngredientDTO> allIngredients = ingredientService.getAll();
         List<IngredientRecipeDTO> presentIngredientRecipes = getIngredientRecipesByRecipeUrlId(urlId);
         List<IngredientDTO> presentIngredients = getIngredientsByIngredientRecipes(presentIngredientRecipes);
-        List<IngredientDTO> remainingIngredients = new ArrayList<>();
 
-        for (IngredientDTO ingredient : allIngredients) {
-            if (!presentIngredients.contains(ingredient)) {
-                remainingIngredients.add(ingredient);
-            }
-        }
-
-        return remainingIngredients;
+        return allIngredients.stream()
+                .filter(ingredient -> !presentIngredients.contains(ingredient))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<RecipeDTO> getRecipesByUsername(String username) {
         Optional<SocialMealsUser> user = socialMealsUserRepository.findByUsername(username);
-        List<Recipe> recipes = null;
 
-        if (user.isPresent()) {
-            recipes = recipeRepository.findRecipesBySocialMealsUser(user.get());
-        }
+        List<Recipe> recipes = user.map(socialMealsUser ->
+                recipeRepository.findRecipesBySocialMealsUser(socialMealsUser))
+                .orElse(List.of());
 
         return recipeConverter.toListDTO(recipes);
     }
@@ -223,11 +217,9 @@ public class RecipeServiceMySQL implements RecipeService {
     }
 
     private List<IngredientDTO> getIngredientsByIngredientRecipes(List<IngredientRecipeDTO> ingredientRecipes) {
-        List<IngredientDTO> ingredients = new ArrayList<>();
-        for (IngredientRecipeDTO ingredientRecipeDTO : ingredientRecipes) {
-            ingredients.add(ingredientRecipeDTO.getIngredientDTO());
-        }
-        return ingredients;
+        return ingredientRecipes.stream()
+                .map(IngredientRecipeDTO::getIngredientDTO)
+                .collect(Collectors.toList());
     }
 
     private long findNextRecipeId() {

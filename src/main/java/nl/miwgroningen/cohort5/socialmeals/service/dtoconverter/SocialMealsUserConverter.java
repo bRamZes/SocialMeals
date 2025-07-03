@@ -3,8 +3,8 @@ package nl.miwgroningen.cohort5.socialmeals.service.dtoconverter;
 import nl.miwgroningen.cohort5.socialmeals.dto.SocialMealsUserDTO;
 import nl.miwgroningen.cohort5.socialmeals.model.SocialMealsUser;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Wessel van Dommelen <w.r.van.dommelen@st.hanze.nl>
@@ -14,13 +14,9 @@ import java.util.List;
 public class SocialMealsUserConverter {
 
     public List<SocialMealsUserDTO> toListSocialMealsUserDTOs(List<SocialMealsUser> socialMealsUsers) {
-        List<SocialMealsUserDTO> resultList = new ArrayList<>();
-
-        for (SocialMealsUser socialMealsUser : socialMealsUsers) {
-            resultList.add(toDTO(socialMealsUser));
-        }
-
-        return resultList;
+        return socialMealsUsers.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
     }
 
     public SocialMealsUserDTO toDTO(SocialMealsUser socialMealsUser) {

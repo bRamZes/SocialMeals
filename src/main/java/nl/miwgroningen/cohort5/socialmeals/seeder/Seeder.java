@@ -16,6 +16,8 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author A.H. van Zessen
@@ -29,6 +31,8 @@ public class Seeder {
     private final SocialMealsUserDetailService socialMealsUserDetailService;
     private final CookbookService cookbookService;
     private final RatingService ratingService;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Seeder.class);
 
     @Autowired
     public Seeder(RecipeService recipeService,
@@ -365,7 +369,7 @@ public class Seeder {
             ImageIO.write(bImage, "jpg", outputStream);
             data = outputStream.toByteArray();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Failed to read image {}", image.getAbsolutePath(), e);
         }
 
         return data;

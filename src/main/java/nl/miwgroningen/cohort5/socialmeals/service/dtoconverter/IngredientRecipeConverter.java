@@ -6,8 +6,8 @@ import nl.miwgroningen.cohort5.socialmeals.model.IngredientRecipe;
 import nl.miwgroningen.cohort5.socialmeals.model.Recipe;
 import nl.miwgroningen.cohort5.socialmeals.service.IngredientService;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Britt van Mourik
@@ -56,12 +56,8 @@ public class IngredientRecipeConverter {
     }
 
     public List<IngredientRecipeDTO> toListDTO(List<IngredientRecipe> ingredientRecipeList) {
-        List<IngredientRecipeDTO> ingredientRecipeDTOList = new ArrayList<>();
-
-        for (IngredientRecipe ingredientRecipe : ingredientRecipeList) {
-            ingredientRecipeDTOList.add(toDTO(ingredientRecipe));
-        }
-
-        return ingredientRecipeDTOList;
+        return ingredientRecipeList.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
     }
 }
