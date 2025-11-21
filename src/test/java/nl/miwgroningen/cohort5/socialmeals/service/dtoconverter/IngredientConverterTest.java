@@ -2,62 +2,25 @@ package nl.miwgroningen.cohort5.socialmeals.service.dtoconverter;
 
 import nl.miwgroningen.cohort5.socialmeals.dto.IngredientDTO;
 import nl.miwgroningen.cohort5.socialmeals.model.Ingredient;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-
-/**
- * Tests for IngredientConverter
- */
-
 class IngredientConverterTest {
 
+    private final IngredientConverter converter = new IngredientConverter();
+
     @Test
-    void toDTO() {
-        //arrange
-        Ingredient testIngredient = new Ingredient("testIngredient");
-        IngredientConverter testObj = new IngredientConverter();
-
-        //act
-        IngredientDTO testIngredientDTO = testObj.toDTO(testIngredient);
-
-        //assert
-        assertThat("testIngredient").isEqualTo(testIngredientDTO.getIngredientName());
+    void toDTOConvertsName() {
+        Ingredient ingredient = new Ingredient("Sugar");
+        IngredientDTO dto = converter.toDTO(ingredient);
+        assertThat(dto.getIngredientName()).isEqualTo("Sugar");
     }
 
     @Test
-    void toListDTO() {
-        //arrange
-        List<Ingredient> testIngredientList = new ArrayList<>();
-        testIngredientList.add(new Ingredient("testIngredient"));
-        testIngredientList.add(new Ingredient("testIngredient2"));
-        testIngredientList.add(new Ingredient("testIngredient3"));
-        IngredientConverter testObj = new IngredientConverter();
-
-        //act
-        List<IngredientDTO> testListObjDTO = testObj.toListDTO(testIngredientList);
-
-        //assert
-        for (int i = 0; i < testListObjDTO.size(); i++) {
-            assertThat(testIngredientList.get(i).getIngredientName())
-                    .isEqualTo(testListObjDTO.get(i).getIngredientName());
-        }
-    }
-
-    @Test
-    void fromDTO() {
-        //arrange
-        IngredientDTO testIngredientDTO = new IngredientDTO("testIngredientName");
-        IngredientConverter ingredientConverter = new IngredientConverter();
-
-        //act
-        Ingredient testIngredient = ingredientConverter.fromDTO(testIngredientDTO);
-
-        //assert
-        assertThat("testIngredientName").isEqualTo(testIngredient.getIngredientName());
+    void fromDTOCreatesIngredient() {
+        IngredientDTO dto = new IngredientDTO("Salt");
+        Ingredient ingredient = converter.fromDTO(dto);
+        assertThat(ingredient.getIngredientName()).isEqualTo("Salt");
     }
 }

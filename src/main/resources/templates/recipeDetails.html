@@ -39,11 +39,11 @@
         <div class="col-3 d-flex flex-row-reverse">
             <div class="width-match-content">
                 <div th:if="${recipeImage == null}" class="defaultRecipeImage">
-                    <img class="defaultImage" src="/images/favicon.png">
+                    <img class="defaultImage" src="/images/favicon.png" alt="Default recipe image">
                 </div>
 
                 <div th:unless="${recipeImage == null}">
-                    <img class="recipeImage" th:src="*{'data:image/png;base64,' + recipeImage}">
+                    <img class="recipeImage" th:src="*{'data:image/png;base64,' + recipeImage}" alt="Recipe image">
                 </div>
 
                 <div class="row justify-content-center">
