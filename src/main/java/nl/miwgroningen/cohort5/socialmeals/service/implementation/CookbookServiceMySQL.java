@@ -13,7 +13,6 @@ import nl.miwgroningen.cohort5.socialmeals.service.dtoconverter.CookbookConverte
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -135,12 +134,9 @@ public class CookbookServiceMySQL implements CookbookService {
                 .filter(searchList::contains)
                 .collect(Collectors.toList());
 
-        List<RecipeDTO> recipeDTOList = new ArrayList<>();
-        for (Long recipe : filteredByCookbook) {
-            recipeDTOList.add(recipeService.findByUrlId(recipe));
-        }
-
-        return recipeDTOList;
+        return filteredByCookbook.stream()
+                .map(recipeService::findByUrlId)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -153,12 +149,9 @@ public class CookbookServiceMySQL implements CookbookService {
                 .filter(searchList::contains)
                 .collect(Collectors.toList());
 
-        List<RecipeDTO> recipeDTOList = new ArrayList<>();
-        for (Long recipe : filteredByCookbook) {
-            recipeDTOList.add(recipeService.findByUrlId(recipe));
-        }
-
-        return recipeDTOList;
+        return filteredByCookbook.stream()
+                .map(recipeService::findByUrlId)
+                .collect(Collectors.toList());
     }
 
     private long findNextCookbookId() {

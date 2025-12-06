@@ -4,8 +4,8 @@ import nl.miwgroningen.cohort5.socialmeals.dto.RecipeDTO;
 import nl.miwgroningen.cohort5.socialmeals.model.Recipe;
 import nl.miwgroningen.cohort5.socialmeals.model.SocialMealsUser;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author A.H. van Zessen
@@ -30,13 +30,9 @@ public class RecipeConverter {
     }
 
     public List<RecipeDTO> toListDTO(List<Recipe> recipeList) {
-        List<RecipeDTO> returnList = new ArrayList<>();
-
-        for (Recipe recipe : recipeList) {
-            returnList.add(toDTO(recipe));
-        }
-
-        return returnList;
+        return recipeList.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
     }
 
     public Recipe fromDTO(RecipeDTO recipeDTO, SocialMealsUser socialMealsUser) {

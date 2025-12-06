@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.Lob;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
@@ -35,6 +37,8 @@ public class RecipeCreateUpdateDeleteController {
     private final RecipeService recipeService;
     private final IngredientService ingredientService;
     private final SocialMealsUserDetailService socialMealsUserDetailService;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RecipeCreateUpdateDeleteController.class);
 
     public RecipeCreateUpdateDeleteController(RecipeService recipeService,
                                               IngredientService ingredientService,
@@ -125,8 +129,8 @@ public class RecipeCreateUpdateDeleteController {
 
         try {
             recipeDTO.setRecipeImage(multipartImage.getBytes());
-        } catch (IOException iOExeption) {
-            iOExeption.printStackTrace();
+        } catch (IOException exception) {
+            LOGGER.error("Unable to process uploaded image", exception);
         }
 
         recipeService.updateRecipeWithImage(recipeService.findByUrlId(urlId), recipeDTO);
@@ -200,7 +204,7 @@ public class RecipeCreateUpdateDeleteController {
         try {
             recipeService.addIngredientToRecipe(ingredientRecipeDTO);
         } catch (NullPointerException error) {
-            System.err.println(error.getMessage());
+            LOGGER.error("Failed to add ingredient to recipe", error);
         }
 
         return "redirect:/recipe/update/" + urlId;
@@ -214,7 +218,7 @@ public class RecipeCreateUpdateDeleteController {
             IngredientRecipe ingredientRecipe = recipeService.getIngredientRecipeByNameAndUrlId(ingredientName, urlId);
             recipeService.deleteIngredientFromRecipe(ingredientRecipe);
         } catch (NullPointerException error) {
-            System.err.println(error.getMessage());
+            LOGGER.error("Failed to delete ingredient from recipe", error);
         }
 
         return "redirect:/recipe/update/" + urlId;
